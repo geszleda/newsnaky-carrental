@@ -1,0 +1,19 @@
+.imgmoveminimal{
+    height: 400px;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.imgmovemaximal{
+    height: 400px;
+    object-fit: cover;
+    object-position: 80% 80%;
+}
+
+.imgmovemiddle{
+    height: 400px;
+    object-fit: cover;
+    object-position: 70% 70%;
+}
+
+body {background-color: lightgray;}
