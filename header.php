@@ -22,7 +22,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="index.php" class="nav-link px-2 text-secondary">Kezdőoldal</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Kínálat</a></li>
+                    <li><a href="offers.php" class="nav-link px-2 text-white">Kínálat</a></li>
             <?php
             if(!(isExistSession("user") && $_SESSION["user"]!="admin")){
                 echo 

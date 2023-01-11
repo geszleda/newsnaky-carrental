@@ -17,3 +17,10 @@
 }
 
 body {background-color: lightgray;}
+
+.carprint{
+    background-image: url("../resources/carprint.png");
+    height: 63px;
+    flex: 0 0 100%;
+    display: flex;
+}
