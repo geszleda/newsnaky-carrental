@@ -24,3 +24,10 @@ body {background-color: lightgray;}
     flex: 0 0 100%;
     display: flex;
 }
+
+.bordered {
+    background-color: lightgray;
+    border-style: dashed;
+    border-color: #212529;
+    border-width: 3px;
+}
