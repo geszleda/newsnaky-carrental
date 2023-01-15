@@ -1,6 +1,7 @@
 <?php   include_once 'header.php';
         include_once 'data/dbConnection.php';
         include_once 'model/auto.php';
+        include_once 'generalfunctions.php'
 ?>
 <br>
 <div class="carprint"></div>
@@ -12,7 +13,7 @@
                 <h1 class="display-4 fst-italic">Bérlemények</h1>
                 <p class="lead my-3">Válassza ki az Önnek legmegfelelőbb járművet!</p>
                 <?php
-                    $query='select * from auto';
+                    $query='select distinct * from auto';
                     $db = getConnectedDb();
                     $result=pg_query($db, $query);
                     if (!$result){
@@ -60,6 +61,8 @@
                         <p>Auto típus: <?php echo $auto->type ?> </p>
                         <p>Auto automataváltós: <?php echo $auto->isAutomaticShifter ?> </p>
                         <p>Auto napidíj: <?php echo $auto->dailyFee ?> </p>
+                        <?php echo
+                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">Tovább az az autó profiljára:</a></p>"; ?>
                         </div>
                     <?php
                     }

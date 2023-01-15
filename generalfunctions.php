@@ -18,7 +18,7 @@ function isExistSessionArray($string){
 }
 
 function directToPage($page){
-    header('Location: ' .$page.'.php');
+    header('Location: ' .$page);
     die;
 }
 
