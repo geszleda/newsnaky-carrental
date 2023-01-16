@@ -10,10 +10,10 @@
     <div class="row justify-content-center">
         <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
             <div class="col-12 px-0">
-                <h1 class="display-4 fst-italic">Bérlemények</h1>
-                <p class="lead my-3">Válassza ki az Önnek legmegfelelőbb járművet!</p>
+                <h1 class="display-4 fst-italic">BĂ©rlemĂ©nyek</h1>
+                <p class="lead my-3">VĂˇlassza ki az Ă–nnek legmegfelelĹ‘bb jĂˇrmĹ±vet!</p>
                 <?php
-                    $query='select distinct * from auto';
+                    $query='SELECT distinct marka, tipus, kepHivatkozas FROM auto';
                     $db = getConnectedDb();
                     $result=pg_query($db, $query);
                     if (!$result){
@@ -28,7 +28,7 @@
                     <?php
                     for($i=0; $i<$row; $i++){
                         ?>
-                        <div class="p-2 item bordered">
+                        <div class="p-2 item bordered gap-3">
                     <?php
                         $auto = new Auto();
                         
@@ -36,33 +36,21 @@
                             $rowColumnResult = pg_fetch_result($result, $i, $j);
                             switch ($j) {
                                 case 0:
-                                    $auto->set_id((int)$rowColumnResult);
-                                    break;
-                                case 1:
                                     $auto->set_brand($rowColumnResult);
                                     break;
-                                case 2:
+                                case 1:
                                     $auto->set_type($rowColumnResult);
                                     break;
-                                case 3:
-                                    $auto->set_isAutomaticShifter((bool)$rowColumnResult);
-                                    break;
-                                case 4:
-                                    $auto->set_dailyFee((int)$rowColumnResult);
-                                    break;
-                                case 5:
+                                case 2:
                                     $auto->set_imagePath($rowColumnResult);
                                     break;
                             }
                         }
                         ?>
-                        <p>Auto id: <?php echo $auto->id ?> </p>
-                        <p>Auto márka: <?php echo $auto->brand ?> </p>
-                        <p>Auto típus: <?php echo $auto->type ?> </p>
-                        <p>Auto automataváltós: <?php echo $auto->isAutomaticShifter ?> </p>
-                        <p>Auto napidíj: <?php echo $auto->dailyFee ?> </p>
+                        <p><img src="<?php echo $auto->imagePath ?>" class="preview"></p>
+                        <h4><?php echo $auto->brand ?> <?php echo $auto->type ?> </h4>
                         <?php echo
-                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">Tovább az az autó profiljára:</a></p>"; ?>
+                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">TovĂˇbb az az autĂł profiljĂˇra:</a></p>"; ?>
                         </div>
                     <?php
                     }
