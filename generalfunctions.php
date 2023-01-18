@@ -1,6 +1,6 @@
 <?php
 
-function isExitsGet($string){
+function isExistGet($string){
     return isset($_GET[$string]) && strlen(trim($_GET[$string])) != 0;
 }
 

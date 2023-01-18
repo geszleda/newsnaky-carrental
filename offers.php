@@ -1,17 +1,11 @@
 <?php   include_once 'header.php';
         include_once 'data/dbConnection.php';
         include_once 'model/auto.php';
-        include_once 'generalfunctions.php'
+        include_once 'generalfunctions.php';
+        include_once 'generalmainpage.php';
 ?>
-<br>
-<div class="carprint"></div>
-<br>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
-            <div class="col-12 px-0">
-                <h1 class="display-4 fst-italic">BĂ©rlemĂ©nyek</h1>
-                <p class="lead my-3">VĂˇlassza ki az Ă–nnek legmegfelelĹ‘bb jĂˇrmĹ±vet!</p>
+                <h1 class="display-4 fst-italic">Bérlemények</h1>
+                <p class="lead my-3">Válassza ki az Önnek legmegfelelőbb járművet!</p>
                 <?php
                     $query='SELECT distinct marka, tipus, kepHivatkozas FROM auto';
                     $db = getConnectedDb();
@@ -50,7 +44,7 @@
                         <p><img src="<?php echo $auto->imagePath ?>" class="preview"></p>
                         <h4><?php echo $auto->brand ?> <?php echo $auto->type ?> </h4>
                         <?php echo
-                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">TovĂˇbb az az autĂł profiljĂˇra:</a></p>"; ?>
+                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">Tovább az autó profiljára:</a></p>"; ?>
                         </div>
                     <?php
                     }
