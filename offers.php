@@ -44,7 +44,7 @@
                         <p><img src="<?php echo $auto->imagePath ?>" class="preview"></p>
                         <h4><?php echo $auto->brand ?> <?php echo $auto->type ?> </h4>
                         <?php echo
-                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "\">Tovább az autó profiljára:</a></p>"; ?>
+                        "<p><a href=\"autoprofile.php?brand=" . $auto->brand . "&type=" . $auto->type . "&img=" . $auto->imagePath . "\">Tovább az autó profiljára:</a></p>"; ?>
                         </div>
                     <?php
                     }
