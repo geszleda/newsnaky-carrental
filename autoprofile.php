@@ -38,15 +38,60 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
                         Kölcsönzés vége
                         <input type="date" name="endDate" />
                     </label>
-                    <p><button type="button" class="btn btn-primary">Árkalkuláció</button></p>
+                    <p><input type="submit" value="Árkaluláció"></p>
                 </form>
-                <p>Kölcsönzési díj: </p> 
-                <button onclick="location.href='rent.php'" type="button" class="btn btn-outline-primary"><h3>   Foglalás    </h3></button>
+                <p>Kölcsönzési díj: <?php echo calculatePrice($brand, $type) ?> Ft</p>
+                <button onclick="location.href='rent.php'" type="button" class="btn btn-outline-primary"><h3>--->FOGLALÁS<---</h3></button>
             </p>
         </div>
     </div>
 <?php
     }
+}
+
+function calculatePrice($brand, $type){
+    if (isExistGet('startDate') && isExistGet('endDate')){
+        $differencesInDays = getDifferencesInDate();
+        $discountByDate = getDiscountDependingOnDate($differencesInDays);
+
+        $db = getConnectedDb();
+        $query="
+            SELECT napidij FROM auto where marka='" . $brand . "' and tipus='" . $type . "';";
+    
+        $result=pg_query($db, $query);
+
+        $price = (int)pg_fetch_result($result, 0, 0) * (int)$differencesInDays * ((100 - $discountByDate)/100);
+    
+        return $price;
+    }
+
+    return '-';
+}
+
+function getDifferencesInDate(){
+    if (isExistGet('startDate') && isExistGet('endDate')){
+        $startDate = strtotime($_GET['startDate']);
+        $endDate = strtotime($_GET['endDate']);
+
+        $differenceInSecond  = $endDate - $startDate;
+        $differenceInDays = round($differenceInSecond / (60*60*24));
+
+        return $differenceInDays;
+    }
+
+    return 0;
+}
+
+function getDiscountDependingOnDate($differenceInDays){
+    if ($differenceInDays > 7){
+        return 10;
+    }
+    else if($differenceInDays > 5)
+    {
+        return 5;
+    }
+
+    return 0;
 }
 
 function countHowManyAvailable($brand, $type){
