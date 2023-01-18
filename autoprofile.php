@@ -24,24 +24,32 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
         <div class="p-8 item borderedWithoutHoverOpacity">
             <p><img src="<?php echo $img ?>" class="maximizedWidth"></p>
             <p lead my-3>
-                <form   action="autoprofile.php"
+                <form   action="autoprofile.php#priceCalculator"
                         method="GET">
                     <input type="hidden" name="brand" value="<?php echo $brand;?>">
                     <input type="hidden" name="type" value="<?php echo $type;?>">
                     <input type="hidden" name="img" value="<?php echo $img;?>">
-                    <label>
-                        Kölcsönzés kezdete
-                        <input type="date" name="startDate" />
+                    <label class="lead my-3">
+                        Kölcsönzés kezdete:
+                        <input type="date" name="startDate" value="<?php echo $_GET['startDate'];?>"/>
                     </label>
-                    <br>
-                    <label>
-                        Kölcsönzés vége
-                        <input type="date" name="endDate" />
+                                                       
+                    <label class="lead my-3">
+                        Kölcsönzés vége:
+                        <input type="date" name="endDate" value="<?php echo $_GET['endDate'];?>"/>
                     </label>
-                    <p><input type="submit" value="Árkaluláció"></p>
+                    <p id='priceCalculator'><input type="submit" value="Árkalkuláció" class="btn btn-primary"></p>
                 </form>
-                <p>Kölcsönzési díj: <?php echo calculatePrice($brand, $type) ?> Ft</p>
-                <button onclick="location.href='rent.php'" type="button" class="btn btn-outline-primary"><h3>--->FOGLALÁS<---</h3></button>
+                <?php $price = calculatePrice($brand, $type) ?>
+                <p class="lead my-3">Kölcsönzési díj: <?php echo $price ?> Ft</p>
+                <form   action="rent.php"
+                        method="POST">
+                    <input type="hidden" name="auto_id" value="<?php echo getIdOfAvailableCar($brand, $type);?>">
+                    <input type="hidden" name="price" value="<?php echo $price;?>">
+                    <input type="hidden" name="startDate" value="<?php echo $_GET['startDate'];?>">
+                    <input type="hidden" name="startDate" value="<?php echo $_GET['endDate'];?>">
+                    <p><input type="submit" value="--->FOGLALÁS<---" class="fs-4 btn btn-outline-primary"></p>
+                </form>
             </p>
         </div>
     </div>
@@ -92,6 +100,18 @@ function getDiscountDependingOnDate($differenceInDays){
     }
 
     return 0;
+}
+
+function getIdOfAvailableCar($brand, $type){
+    $db = getConnectedDb();
+    $query="
+            SELECT id FROM auto where marka='" . $brand . "' and tipus='" . $type . "' 
+            EXCEPT
+            SELECT auto_id FROM kolcsonzes where kezdete <= CURRENT_DATE and vege >= CURRENT_DATE;";
+
+    $result=pg_query($db, $query);
+
+    return (int)pg_fetch_result($result, 0, 0);
 }
 
 function countHowManyAvailable($brand, $type){
