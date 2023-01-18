@@ -10,9 +10,14 @@ if (isExistGet('brand') && isExistGet('type')){
     $countOfAvailableCars = countHowManyAvailable($brand, $type);
 
     if($countOfAvailableCars == 0) {
-        echo 'Sajnáljuk, jelenleg egy autó sem elérhető ebből a típusból.';
+        echo    '<p class="lead my-3"><b>
+                    Sajnáljuk, jelenleg egy autó sem elérhető ebből a típusból. <br><br>
+                    Legközelebbi dátum, amikor felszabadul az autó: ' . checkNextAvailability($brand, $type) . 
+                '</b></p>';
     }else{
-        echo 'Jelenleg ' . $countOfAvailableCars . ' darab elérhető ebből a típusból.';
+        echo    '<p class="lead my-3">
+                    Jelenleg <b>' . $countOfAvailableCars . ' darab</b> elérhető ebből a típusból.
+                </p>';
     }
 }
 
@@ -27,6 +32,19 @@ function countHowManyAvailable($brand, $type){
     $result=pg_query($db, $query);
 
     return (int)pg_fetch_result($result, 0, 0);
+}
+
+function checkNextAvailability($brand, $type){
+    $db = getConnectedDb();
+    $query="
+        SELECT vege + 1 FROM auto
+        JOIN kolcsonzes ON auto.id = kolcsonzes.auto_id
+        WHERE marka='" . $brand . "' and tipus='" . $type . "' and vege>CURRENT_DATE
+        ORDER BY vege;";
+
+    $result=pg_query($db, $query);
+
+    return pg_fetch_result($result, 0, 0);
 }
 
 include_once 'footer.php';
