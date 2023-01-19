@@ -1,4 +1,5 @@
 <?php   include_once 'generalfunctions.php';
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -24,17 +25,27 @@
                     <li><a href="index.php" class="nav-link px-2 text-secondary">Kezdőoldal</a></li>
                     <li><a href="offers.php" class="nav-link px-2 text-white">Kínálat</a></li>
             <?php
-            if(!(isExistSession("user") && $_SESSION["user"]!="admin")){
+            if(isExistSession("user") && $_SESSION["user"]=="admin"){
                 echo 
                     '<li><a href="#" class="nav-link px-2 text-white">Feltöltés</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Kimutatások</a></li>';
             }?>
                     </ul>
 
-                    <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2">Bejelentkezés</button>
-                    <button type="button" class="btn btn-info">Regisztráció</button>
-                    </div>
+            <?php
+            if(!isExistSession("user")){ ?>
+                <div class="text-end">
+                <a href="login.php"><button type="button" class="btn btn-outline-light me-2">Bejelentkezés</button></a>
+                <button type="button" class="btn btn-info">Regisztráció</button>
+                </div>
+            <?php
+            }else{ ?>
+                <div class="text-end">
+                Üdvözöllek, <?php echo $_SESSION['name']; ?>!
+                <a href="logout.php"><button type="button" class="btn btn-outline-light me-2">Kijelentkezés</button></a>
+                </div>         
+            <?php
+            } ?>
                 </div>
             </div>
             </header>
