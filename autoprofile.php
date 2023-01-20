@@ -3,6 +3,14 @@
         include_once 'data/dbConnection.php';
         include_once 'generalmainpage.php';
 
+if (isExistSession('loginRequiredErrorMessage'))
+{
+    echo "<p class=\"red lead my-3\">" . $_SESSION['loginRequiredErrorMessage'] . "</p>";
+    unset($_SESSION['loginRequiredErrorMessage']);
+}else{
+    echo "NINCS BAJ!";
+}
+
 if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
     $brand = $_GET['brand'];
     $type = $_GET['type'];
@@ -48,6 +56,9 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
                     <input type="hidden" name="price" value="<?php echo $price;?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['startDate'];?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['endDate'];?>">
+                    <input type="hidden" name="brand" value="<?php echo $brand;?>">
+                    <input type="hidden" name="type" value="<?php echo $type;?>">
+                    <input type="hidden" name="img" value="<?php echo $img;?>">
                     <p><input type="submit" value="--->FOGLALÁS<---" class="fs-4 btn btn-outline-primary"></p>
                 </form>
             </p>
