@@ -7,8 +7,6 @@ if (isExistSession('loginRequiredErrorMessage'))
 {
     echo "<p class=\"red lead my-3\">" . $_SESSION['loginRequiredErrorMessage'] . "</p>";
     unset($_SESSION['loginRequiredErrorMessage']);
-}else{
-    echo "NINCS BAJ!";
 }
 
 if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
@@ -53,7 +51,8 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
                 <form   action="rent.php"
                         method="POST">
                     <input type="hidden" name="auto_id" value="<?php echo getIdOfAvailableCar($brand, $type);?>">
-                    <input type="hidden" name="price" value="<?php echo $price;?>">
+                    <input type="hidden" name="dailyFee" value="<?php echo getDailyFee($brand, $type);?>">
+                    <input type="hidden" name="discount" value="<?php echo getDiscountDependingOnDate($brand, $type);?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['startDate'];?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['endDate'];?>">
                     <input type="hidden" name="brand" value="<?php echo $brand;?>">
@@ -68,18 +67,30 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
     }
 }
 
-function calculatePrice($brand, $type){
+function getDailyFee($brand, $type){
     if (isExistGet('startDate') && isExistGet('endDate')){
-        $differencesInDays = getDifferencesInDate();
-        $discountByDate = getDiscountDependingOnDate($differencesInDays);
-
         $db = getConnectedDb();
         $query="
             SELECT napidij FROM auto where marka='" . $brand . "' and tipus='" . $type . "';";
     
         $result=pg_query($db, $query);
 
-        $price = (int)pg_fetch_result($result, 0, 0) * (int)$differencesInDays * ((100 - $discountByDate)/100);
+        $dailyFee = (int)pg_fetch_result($result, 0, 0);
+    
+        return $dailyFee;
+    }
+
+    return 0;
+}
+
+
+function calculatePrice($brand, $type){
+    if (isExistGet('startDate') && isExistGet('endDate')){
+        $differencesInDays = getDifferencesInDate();
+        $discountByDate = getDiscountDependingOnDate($differencesInDays);
+        $dailyFee = getDailyFee($brand, $type);
+
+        $price =  $dailyFee * (int)$differencesInDays * ((100 - $discountByDate)/100);
     
         return $price;
     }
@@ -95,13 +106,15 @@ function getDifferencesInDate(){
         $differenceInSecond  = $endDate - $startDate;
         $differenceInDays = round($differenceInSecond / (60*60*24));
 
-        return $differenceInDays;
+        return $differenceInDays + 1;
     }
 
     return 0;
 }
 
-function getDiscountDependingOnDate($differenceInDays){
+function getDiscountDependingOnDate(){
+    $differenceInDays = getDifferencesInDate();
+
     if ($differenceInDays > 7){
         return 10;
     }
