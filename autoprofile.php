@@ -7,6 +7,12 @@ if (isExistSession('loginRequiredErrorMessage'))
 {
     echo "<p class=\"red lead my-3\">" . $_SESSION['loginRequiredErrorMessage'] . "</p>";
     unset($_SESSION['loginRequiredErrorMessage']);
+}else if (isExistSession('succesfulRentFeedback')){
+    echo "<p class=\"green lead my-3\">" . $_SESSION['succesfulRentFeedback'] . "</p>";
+    unset($_SESSION['succesfulRentFeedback']);
+}else if (isExistSession('unsuccesfulRentFeedback')){
+    echo "<p class=\"red lead my-3\">" . $_SESSION['unsuccesfulRentFeedback'] . "</p>";
+    unset($_SESSION['unsuccesfulRentFeedback']); 
 }
 
 if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
@@ -51,10 +57,9 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
                 <form   action="rent.php"
                         method="POST">
                     <input type="hidden" name="auto_id" value="<?php echo getIdOfAvailableCar($brand, $type);?>">
-                    <input type="hidden" name="dailyFee" value="<?php echo getDailyFee($brand, $type);?>">
                     <input type="hidden" name="discount" value="<?php echo getDiscountDependingOnDate($brand, $type);?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['startDate'];?>">
-                    <input type="hidden" name="startDate" value="<?php echo $_GET['endDate'];?>">
+                    <input type="hidden" name="endDate" value="<?php echo $_GET['endDate'];?>">
                     <input type="hidden" name="brand" value="<?php echo $brand;?>">
                     <input type="hidden" name="type" value="<?php echo $type;?>">
                     <input type="hidden" name="img" value="<?php echo $img;?>">

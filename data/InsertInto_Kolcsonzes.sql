@@ -31,3 +31,11 @@ VALUES (1, 8, 20, 0, DATE '2022-08-01', DATE '2022-08-05'),
        (30, 20, 20, 10, DATE '2022-07-15', DATE '2022-07-18'),
        (31, 6, 5, 10, DATE '2022-07-30', DATE '2022-08-05'),
        (32, 7, 2, 0, DATE '2022-08-01', DATE '2022-08-03');
+
+CREATE SEQUENCE kolcsonzes_sequence
+  start 33
+  increment 1;
+
+INSERT INTO kolcsonzes (id, ugyfel_id, auto_id, kedvezmeny, kezdete, vege)
+VALUES
+  (nextval('kolcsonzes_sequence'), 17, 10, 5, DATE '2023-07-01', DATE '2023-07-10');
