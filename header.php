@@ -27,8 +27,7 @@
             <?php
             if(isExistSession("user") && $_SESSION["user"]=="admin"){
                 echo 
-                    '<li><a href="#" class="nav-link px-2 text-white">Feltöltés</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Kimutatások</a></li>';
+                    '<li><a href="adminedit.php" class="nav-link px-2 text-white">Admin-kezelőfelület</a></li>';
             }?>
                     </ul>
 
