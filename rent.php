@@ -10,15 +10,22 @@ if (isExistSession('user') && isExistPost('auto_id')){
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
 
-    $success = insertNewRent($userId, $autoId, $discount, $startDate, $endDate);
+    if (!isUserEntitledToRentThisCar($userId, $autoId)){
+        $_SESSION['unsuccesfulRentFeedback'] = "Önnek csak automataváltós jogosítványa van, ezért nem jogosult vezetni
+        ezt az autót.";
 
-    if ($success){
-        $_SESSION['succesfulRentFeedback'] = "Sikeres foglalás.";
+        directToPage('autoprofile.php?brand=' . $_POST["brand"] . '&type=' . $_POST["type"] . '&img=' . $_POST["img"]);
     }else{
-        $_SESSION['unsuccesfulRentFeedback'] = "Sikertelen foglalás, kérem próbálja újra.";
-    }
+        $success = insertNewRent($userId, $autoId, $discount, $startDate, $endDate);
 
-    directToPage('autoprofile.php?brand=' . $_POST["brand"] . '&type=' . $_POST["type"] . '&img=' . $_POST["img"]);
+        if ($success){
+            $_SESSION['succesfulRentFeedback'] = "Sikeres foglalás.";
+        }else{
+            $_SESSION['unsuccesfulRentFeedback'] = "Sikertelen foglalás, kérem próbálja újra.";
+        }
+    
+        directToPage('autoprofile.php?brand=' . $_POST["brand"] . '&type=' . $_POST["type"] . '&img=' . $_POST["img"]);
+    }
 }else{
     $_SESSION['loginRequiredErrorMessage'] = "A foglaláshoz be kell jelentkezni";
     directToPage('autoprofile.php?brand=' . $_POST["brand"] . '&type=' . $_POST["type"] . '&img=' . $_POST["img"]);
@@ -49,5 +56,28 @@ function insertNewRent($userId, $autoId, $discount, $startDate, $endDate){
     $result=pg_query($db, $query);
 
     return $result;
+}
+
+function isUserEntitledToRentThisCar($userId, $autoId){
+    $db = getConnectedDb();
+    $query1="
+        SELECT automatavaltos_e from jogositvany where ugyfel_id=" .$userId.";";
+
+    $result1=pg_query($db, $query1);
+
+    $isDriverHasOnlyAutomaticShifterDrivingLicense = pg_fetch_result($result1, 0, 0) == "t";
+
+    $query2="
+        SELECT automatavaltos_e from auto where id=" .$autoId.";";
+
+    $result2=pg_query($db, $query2);
+
+    $isAutomaticShifterCar = pg_fetch_result($result2, 0, 0) == "t";
+
+    if ($isDriverHasOnlyAutomaticShifterDrivingLicense && !$isAutomaticShifterCar){
+        return false;
+    }
+
+    return true;
 }
 ?>
