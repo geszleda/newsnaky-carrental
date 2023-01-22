@@ -60,6 +60,12 @@ body {background-color: lightgray;}
     overflow: hidden;
 }
 
+.maximizedWidth2 {
+    position:relative;
+    max-width: 600px;
+    overflow: hidden;
+}
+
 .red{
     color: red;
 }
