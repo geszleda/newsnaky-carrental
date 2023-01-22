@@ -27,7 +27,7 @@
             <?php
             if(isExistSession("user") && $_SESSION["user"]=="admin"){
                 echo 
-                    '<li><a href="adminedit.php" class="nav-link px-2 text-white">Admin-kezelőfelület</a></li>';
+                    '<li><a href="adminview.php" class="nav-link px-2 text-white">Admin-kezelőfelület</a></li>';
             }?>
                     </ul>
 

@@ -18,7 +18,11 @@ class Auto{
     }
 
     function set_isAutomaticShifter($isAutomaticShifter){
-        $this->isAutomaticShifter = $isAutomaticShifter;
+        if ($isAutomaticShifter == "t"){
+            $this->isAutomaticShifter = true;
+        }else{
+            $this->isAutomaticShifter = false;
+        }
     }
 
     function set_type($type){
