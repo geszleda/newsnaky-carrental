@@ -16,11 +16,22 @@ if (isExistPost('edited')){
     $auto = getAutoObject($_GET['id']);
 }
 
-if ($_GET['requestType'] == "edit"){?>
+if (isExistPost('deleted')){
+    doDeleteAuto($auto->id);
+
+    ///directToPage('adminview.php');
+}
+
+if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
     <div class="col-5 px-0">
         <div class="col-10 p-8 item borderedWithoutHoverOpacity maximizedWidth2 justify-content-center">
-            <form action="<?= 'admin_autoprofile.php?id=' .$auto->id. '&requestType=edit' ?>" method="post">
-                <input type="hidden" name="edited" value="edited">
+            <?php
+            if ($_GET['requestType'] == "edit"){
+            echo '<form action="admin_autoprofile.php?id=' .$auto->id. '&requestType=edit" method="post">
+                <input type="hidden" name="edited" value="edited">';}
+            else if ($_GET['requestType'] == "delete"){
+            echo '<form action="admin_autoprofile.php?id=' .$auto->id. '&requestType=delete" method="post">
+                <input type="hidden" name="deleted" value="deleted">';}?>
 
                 <label for="id" class="lead my-3">Azonosító:</label>
                 <input type="text" disabled="disabled" name="id" value="<?= $auto->id?>"><br><br>
@@ -42,12 +53,17 @@ if ($_GET['requestType'] == "edit"){?>
                 <label for="img" class="lead my-3">Képhivatkozás:</label>
                 <input type="file" name="img" value="<?= $auto->imagePath?>">
 
-                <p><input type="submit" value="FELÜLÍR" class="fs-4 btn btn-outline-primary"></p>
+        <?php  if ($_GET['requestType'] == "edit"){
+            echo '<p><input type="submit" value="FELÜLÍR" class="fs-4 btn btn-outline-primary"></p>';
+        }else if($_GET['requestType'] == "delete"){
+            echo '<p><input type="submit" value="TÖRÖL" class="fs-4 btn btn-outline-danger"></p>';
+        }?>
             </form>
         </div>
     </div>
 <?php
 }
+
 
 function getCheckedAttributeIfApplicable($actualValue, $expectedValue){
     if ($actualValue == $expectedValue){
@@ -66,8 +82,6 @@ function doEditExistingAuto($autoId){
             napidij =" . (int)$_POST['dailyFee'] . "  
         WHERE id=" . $autoId;
 
-        var_dump($query);
-
     pg_query($db, $query);
 
     if (isExistPost('img')){
@@ -78,5 +92,20 @@ function doEditExistingAuto($autoId){
 
         pg_query($db, $query);
     }
+}
+
+function doDeleteAuto($autoId){
+    $db = getConnectedDb();
+
+    $query = "
+        BEGIN;
+        DELETE FROM kolcsonzes  
+        WHERE auto_id=" . $autoId . ";
+        DELETE FROM auto  
+        WHERE id=" . $autoId . ";
+        COMMIT;";
+
+
+    pg_query($db, $query);
 }
 ?>
