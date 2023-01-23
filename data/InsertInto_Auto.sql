@@ -23,3 +23,7 @@ VALUES
     (21, 'Hyundai', 'Sedan', false, 25000, 'resources\img\rentable\18.jpg'),
     (22, 'Hyundai', 'Sedan', false, 25000, 'resources\img\rentable\18.jpg'),
     (23, 'Ford', 'SUV', true, 27000, 'resources\img\rentable\2.jpg');
+
+CREATE SEQUENCE auto_sequence
+  start 24
+  increment 1;

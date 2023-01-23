@@ -8,7 +8,11 @@ if (!isExistGet('id') || !isExistGet('requestType') || !isExistSession("user") |
     directToPage('adminview.php');
 }
 
-$auto = getAutoObject($_GET['id']);
+$auto = null;
+
+if ($_GET['requestType'] != "addNew"){
+    $auto = getAutoObject($_GET['id']);
+}
 
 if (isExistPost('edited')){
     doEditExistingAuto($auto->id);
@@ -19,7 +23,13 @@ if (isExistPost('edited')){
 if (isExistPost('deleted')){
     doDeleteAuto($auto->id);
 
-    ///directToPage('adminview.php');
+    directToPage('adminview.php');
+}
+
+if (isExistPost('added')){
+    doAddAuto();
+
+    directToPage('adminview.php');
 }
 
 if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
@@ -61,6 +71,35 @@ if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
             </form>
         </div>
     </div>
+<?php
+}
+else if($_GET['requestType'] == "addNew"){?>
+        <div class="col-5 px-0">
+        <div class="col-10 p-8 item borderedWithoutHoverOpacity maximizedWidth2 justify-content-center">
+            <form action="<?= 'admin_autoprofile.php?id=0&requestType=addNew' ?>" method="post">
+                <input type="hidden" name="added" value="added">
+
+                <label for="brand" class="lead my-3">Márka:</label>
+                <input type="text" name="brand"><br><br>
+
+                <label for="type" class="lead my-3">Típus:</label>
+                <input type="text" name="type"><br><br>
+
+                <input type="radio" name="isAutomaticShifter" value="true">
+                <label for="isAutomaticShifter" class="lead my-3">automataváltós</label><br>
+                <input type="radio" name="isAutomaticShifter" value="false">
+                <label for="isAutomaticShifter" class="lead my-3">manuális váltó</label><br><br>
+
+                <label for="dailyFee" class="lead my-3">Napidíj:</label>
+                <input type="number" name="dailyFee" min="10000" max="99999999" step="1000"><br><br>
+
+                <label for="img">Képhivatkozás:</label>
+                <input type="file" name="img">
+
+                <p><input type="submit" value="HOZZÁAD" class="fs-4 btn btn-success"></p>
+        </form>
+    </div>
+</div>
 <?php
 }
 
@@ -107,5 +146,22 @@ function doDeleteAuto($autoId){
 
 
     pg_query($db, $query);
+}
+
+function doAddAuto(){
+    $db = getConnectedDb();
+
+    $brand = $_POST['brand'];
+    $type = $_POST['type'];
+    $isAutomaticShifter = $_POST['isAutomaticShifter'];
+    $dailyFee = $_POST['dailyFee'];
+    $img = $_POST['img'];
+
+    $query = "
+    INSERT INTO auto (id, marka, tipus, automatavaltos_e, napidij, kepHivatkozas)
+    VALUES
+      (nextval('auto_sequence'), '" . $brand . "', '" . $type . "', " . $isAutomaticShifter . ", " . $dailyFee . ", '" . $img . "');";
+
+    $result = pg_query($db, $query);
 }
 ?>
