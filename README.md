@@ -8,7 +8,7 @@ Horráférhető funckiók a jogosultságok alapján:
 
     **JOGOSULTSÁG** // **KÓD** // **NAVIGÁCIÓ A UI-on**
 Vendég: 
--	Kínálat	autó típus // (offers.php) // KÍNÁLAT
+-	Kínálat	autó típus szerint // (offers.php) // KÍNÁLAT
 -	Árkalkuláció* // (autoprofile.php -> calculatePrice) // KÍNÁLAT -> Tovább az autó profiljára -> Árkalkuláció
 
 
@@ -42,6 +42,8 @@ például:
     felhasználónév: horvathjanos, jelszó: jelszo4 
     NEM jogosult a 
 	  autó: Hyundai Sedan autó kölcsönzésére
+
+
 *Árkalkuláció:
 	- aki 5 napon túl foglal autót, az 5% kedvezményre jogosult
 	- aki 7 napon túl foglal autót, a 10% kedvezményre jogosult  (autoprofile.php -> getDiscountDependingOnDate)
