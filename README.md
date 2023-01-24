@@ -1,9 +1,11 @@
 # newsnaky-carrental
-School project to Database 2 subject
+Adatbázis rendszerek programozása beadandó: AUTÓKÖLCSÖNZŐ (46.)
+
+
 Három darab jogosultsági kör létezik az weboldalon: vendég, felhasználó és admin:
 Horráférhető funckiók a jogosultságok alapján:
 
-    **JOGOSULTSÁG**               **KÓD**                         **NAVIGÁCIÓ A UI-on**
+    **JOGOSULTSÁG** // **KÓD** // **NAVIGÁCIÓ A UI-on**
 Vendég: 
 -	Kínálat	autó típus // (offers.php) // KÍNÁLAT
 -	Árkalkuláció* // (autoprofile.php -> calculatePrice) // KÍNÁLAT -> Tovább az autó profiljára -> Árkalkuláció
