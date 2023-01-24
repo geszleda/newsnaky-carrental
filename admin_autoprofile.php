@@ -162,6 +162,6 @@ function doAddAuto(){
     VALUES
       (nextval('auto_sequence'), '" . $brand . "', '" . $type . "', " . $isAutomaticShifter . ", " . $dailyFee . ", '" . $img . "');";
 
-    $result = pg_query($db, $query);
+    pg_query($db, $query);
 }
 ?>

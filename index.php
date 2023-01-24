@@ -48,7 +48,6 @@
             <div class="col-md-6 px-0">
                 <h1 class="display-4 fst-italic">Üdvözli Önt a NewSnaky Cars Kft.!</h1>
                 <p class="lead my-3"></p>
-                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
             </div>
         </div>
     </div>
