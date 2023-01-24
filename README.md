@@ -3,7 +3,7 @@ School project to Database 2 subject
 Három darab jogosultsági kör létezik az weboldalon: vendég, felhasználó és admin:
 Horráférhető funckiók a jogosultságok alapján:
 
-    **JOGOSULTSÁG**               **KÓD**                                 **NAVIGÁCIÓ A UI-on**
+    **JOGOSULTSÁG**               **KÓD**                         **NAVIGÁCIÓ A UI-on**
 Vendég: 
 -	Kínálat	autó típus // (offers.php) // KÍNÁLAT
 -	Árkalkuláció* // (autoprofile.php -> calculatePrice) // KÍNÁLAT -> Tovább az autó profiljára -> Árkalkuláció
@@ -33,4 +33,4 @@ például:
 	  autó: Hyundai Sedan autó kölcsönzésére
 *Árkalkuláció:
 	- aki 5 napon túl foglal autót, az 5% kedvezményre jogosult
-	- aki 7 napon túl foglal autót, a 10% kedvezményre jogosult  (autoprofile.php->getDiscountDependingOnDate)
+	- aki 7 napon túl foglal autót, a 10% kedvezményre jogosult  (autoprofile.php -> getDiscountDependingOnDate)
