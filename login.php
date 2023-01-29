@@ -29,7 +29,8 @@ handleLoginAttempt();
                         <input type="password" name="password" />
                     </label>
                     <br>
-                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" value="BEJELENTKEZÉS" class="btn btn-primary">
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    <input type="submit" value="BEJELENTKEZÉS" class="btn btn-primary">
                 </form>
             </div>
         <div class="col-2"></div>

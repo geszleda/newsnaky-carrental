@@ -36,7 +36,7 @@
             if(!isExistSession("user")){ ?>
                 <div class="text-end">
                 <a href="login.php"><button type="button" class="btn btn-outline-light me-2">Bejelentkezés</button></a>
-                <button type="button" class="btn btn-info">Regisztráció</button>
+                <a href="registration.php"><button type="button" class="btn btn-info">Regisztráció</button></a>
                 </div>
             <?php
             }else{ ?>

@@ -80,4 +80,8 @@ body {background-color: lightgray;}
     color: green;
 }
 
+.alignRight{
+    margin-left: auto; 
+    margin-right: 0;
+}
 
