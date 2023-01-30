@@ -19,3 +19,7 @@ VALUES (1, 1, 'B', 'DEK12345', 'false', DATE '1994-03-22'),
        (18, 18, 'B', 'DEK12362', 'false', DATE '2008-09-10'),
        (19, 19, 'B', 'DEK12363', 'false', DATE '2003-04-15'),
        (20, 20, 'B', 'DEK12364', 'false', DATE '2010-07-20');
+
+CREATE SEQUENCE jogositvany_sequence
+  start 21
+  increment 1;

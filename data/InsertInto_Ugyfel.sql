@@ -20,3 +20,7 @@ VALUES (1, 'Kiss Gábor', 'kissgabor', 'jelszo1', 'kissgabor@example.com'),
        (19, 'Makai Edit', 'makaiedit', 'jelszo19', 'makaiedit@example.com'),
        (20, 'Ádám Máté', 'adammate', 'jelszo20', 'adammate@example.com'),
        (21, 'Admin', 'admin', 'admin', 'admin@admin.com');
+
+CREATE SEQUENCE ugyfel_sequence
+  start 22
+  increment 1;

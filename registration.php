@@ -9,8 +9,15 @@
     <div class="col-10"></div>
         <div class="col-6 borderedWithoutHoverOpacity">
             <?php
-            displayErrorMessage();
-            displaySuccessMessage();
+            if (isExistPost('registered')) {
+                $isValidData = checkValidityOfRegistrationData();
+
+                if ($isValidData)
+                    doRegistrate();
+
+                displayErrorMessage();
+                displaySuccessMessage();
+            }
             displayRegistrationForm(); ?>
             <br>
         </div>
@@ -19,16 +26,88 @@
 
 <?php
 
+function checkValidityOfRegistrationData(){
+    $_SESSION['error'] = '';
+    $password = $_POST['password'];
+    $password2 = $_POST['password2'];
+
+    if (!isExistPost('name') || !isExistPost('username') || !isExistPost('password') || !isExistPost('password2') || !isExistPost('email') ||
+        !isExistPost('cardnumber') || !isExistPost('category') || !isExistPost('isAutomaticShifter') || !isExistPost('date')){
+        $_SESSION['error'] .= "Nem tölött ki minden mezőt. ";
+        return false;
+    }
+
+    if ($password != $password2){
+        $_SESSION['error'] .= "A két jelszó nem egyezik. ";
+    }
+
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+        $_SESSION['error'] .= "Az e-mail cím nem érvényes. ";
+    }
+
+    if (checkIfAlreadyExists('ugyfel', 'felhasznalonev', $_POST['username'])){
+        $_SESSION['error'] .= "Már létezik ilyen felhasználónév. ";    
+    }
+
+    if (checkIfAlreadyExists('ugyfel', 'email', $_POST['email'])){
+        $_SESSION['error'] .= "Már beregisztráltak ezzel az e-mail címmel. ";    
+    }
+
+    return !isExistSession('error');
+}
+
+function doRegistrate(){
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+
+    $db = getConnectedDb();
+
+    $query = "
+        INSERT INTO ugyfel (id, nev, felhasznalonev, jelszo, email)
+        VALUES
+        (nextval('ugyfel_sequence'), '" . $name . "', '" . $username . "', '" . $password . "', '" . $email . "');";
+
+    $successUser = pg_query($db, $query);
+
+    $query = "
+        SELECT max(id) from ugyfel";
+    
+    $result =  pg_query($db, $query);
+    $userId = (int)pg_fetch_result($result, 0, 0);
+
+    $cardnumber = $_POST['cardnumber'];
+    $category = $_POST['category'];
+    $isAutomaticShifter = $_POST['isAutomaticShifter'];
+    $date = $_POST['date'];
+
+    $query = "
+        INSERT INTO jogositvany (id, ugyfel_id, azonositoszam, kategoria, automatavaltos_e, kiallitas_idopontja)
+        VALUES
+        (nextval('jogositvany_sequence'), " . $userId . ", '" . $cardnumber . "', '" . $category . "', " . $isAutomaticShifter . "
+        , '" . $date . "');";
+
+    $successDrivingLicense = pg_query($db, $query);
+
+    if ($successUser && $successDrivingLicense){
+        $_SESSION['success'] .= "Sikeres regisztráció. ";
+        return;
+    }
+
+    $_SESSION['error'] .= "Valami probléma történt, sikertelen regisztráció. ";
+}
+
 function displaySuccessMessage(){
-    if (isExistSession('error'))
+    if (isExistSession('success'))
     {
-        echo "<p class=\"red\">" . $_SESSION['error'] . "</p>";
-        unset($_SESSION['error']);
+        echo "<p class=\"green\">" . $_SESSION['success'] . "</p>";
+        unset($_SESSION['success']);
     }
 }
 
 function displayErrorMessage(){
-    if (isExistPost('error'))
+    if (isExistSession('error'))
     {
         echo "<p class=\"red\">" . $_SESSION['error'] . "</p>";
         unset($_SESSION['error']);
@@ -53,7 +132,7 @@ function displayRegistrationForm(){
         <input type="password" name="password"><br><br>
 
         <label for="password2" class="lead my-3">Jelszó ismétlés:</label><br>
-        <input type="password2" name="password2"><br><br>
+        <input type="password" name="password2"><br><br>
 
         <label for="email" class="lead my-3">Email-cím:</label><br>
         <input type="text" name="email"><br><br>';

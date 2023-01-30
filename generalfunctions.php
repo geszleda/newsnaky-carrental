@@ -57,4 +57,20 @@ function getAutoObject($autoId){
     return $auto;
 }
 
+
+function checkIfAlreadyExists($table, $columnname, $data){
+    $db = getConnectedDb();
+    $query="
+            SELECT count(*) FROM " . $table . " where " . $columnname . "='" . $data . "';";
+
+    $result=pg_query($db, $query);
+
+    if ((int)pg_fetch_result($result, 0, 0) == 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 ?>
