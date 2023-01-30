@@ -2,6 +2,9 @@
         include_once 'generalmainpage.php';
         include_once 'generalfunctions.php';
         include_once 'data/dbConnection.php';
+
+$_SESSION['error'] = '';
+$_SESSION['success'] = '';
 ?>
 
 <div class="container">
@@ -27,7 +30,6 @@
 <?php
 
 function checkValidityOfRegistrationData(){
-    $_SESSION['error'] = '';
     $password = $_POST['password'];
     $password2 = $_POST['password2'];
 
@@ -61,36 +63,27 @@ function doRegistrate(){
     $username = $_POST['username'];
     $password = $_POST['password'];
     $email = $_POST['email'];
-
-    $db = getConnectedDb();
-
-    $query = "
-        INSERT INTO ugyfel (id, nev, felhasznalonev, jelszo, email)
-        VALUES
-        (nextval('ugyfel_sequence'), '" . $name . "', '" . $username . "', '" . $password . "', '" . $email . "');";
-
-    $successUser = pg_query($db, $query);
-
-    $query = "
-        SELECT max(id) from ugyfel";
-    
-    $result =  pg_query($db, $query);
-    $userId = (int)pg_fetch_result($result, 0, 0);
-
     $cardnumber = $_POST['cardnumber'];
     $category = $_POST['category'];
     $isAutomaticShifter = $_POST['isAutomaticShifter'];
     $date = $_POST['date'];
 
+    $db = getConnectedDb();
+
     $query = "
+        BEGIN;
+        INSERT INTO ugyfel (id, nev, felhasznalonev, jelszo, email)
+        VALUES
+        (nextval('ugyfel_sequence'), '" . $name . "', '" . $username . "', '" . $password . "', '" . $email . "');
         INSERT INTO jogositvany (id, ugyfel_id, azonositoszam, kategoria, automatavaltos_e, kiallitas_idopontja)
         VALUES
-        (nextval('jogositvany_sequence'), " . $userId . ", '" . $cardnumber . "', '" . $category . "', " . $isAutomaticShifter . "
-        , '" . $date . "');";
+        (nextval('jogositvany_sequence'), currval('ugyfel_sequence'), '" . $cardnumber . "', '" . $category . "', " . $isAutomaticShifter . "
+        , '" . $date . "');
+        COMMIT;";
 
-    $successDrivingLicense = pg_query($db, $query);
+    $success= pg_query($db, $query);
 
-    if ($successUser && $successDrivingLicense){
+    if ($success){
         $_SESSION['success'] .= "Sikeres regisztráció. ";
         return;
     }
