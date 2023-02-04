@@ -9,7 +9,18 @@ if (!isExistSession("user")){
 }
 
 $user = getUserObject($_SESSION["user"]);
-$drivingLicense = $user->drivingLicense;?>
+$drivingLicense = $user->drivingLicense;
+
+if (isExistPost("edited")){
+    handleEditAttempt($user, $drivingLicense);
+    displayErrorMessage();
+    displaySuccessMessage();
+
+    $user = getUserObject($_SESSION["user"]);
+    $drivingLicense = $user->drivingLicense;
+}
+
+?>
 
 <div class="container">
 <div class="row justify-content-center">
@@ -78,7 +89,7 @@ function displayDrivingLicenseForm($drivingLicense){
         <label for="isAutomaticShifter" class="lead my-3">manuális váltó</label><br>
         
         <label for="date" class="lead my-3">Kiállítás dátuma:</label><br>
-        <input type="date" name="date">';
+        <input type="date" name="date" value="' . $drivingLicense->date . '">';
 }
 
 function isSelected($actualCategory, $expectedCategory){
@@ -91,5 +102,159 @@ function getCheckedAttributeIfApplicable($actualValue, $expectedValue){
     if ($actualValue == $expectedValue){
         return 'checked';
     }
+}
 
+function handleEditAttempt($user, $drivingLicense){
+    $_SESSION['error'] = '';
+    $_SESSION['success'] = '';
+
+    $isValid = checkValidityOfUserAndDrivingLicenseData($user);
+
+    if ($isValid){
+        $editedUser = overwriteUserObject($user);
+        $editedDrivingLicense = overwriteDrivingLicenseObject($drivingLicense);
+        if ($editedUser){
+            doEditUser($editedUser);
+        }
+        if ($editedDrivingLicense){
+            doEditDrivingLicense($editedDrivingLicense);
+        }
+    }
+}
+
+function doEditUser($editedUser)
+{
+    $db = getConnectedDb();
+
+    $query = "
+        UPDATE ugyfel
+        SET nev ='" . $editedUser->name . "', jelszo ='" . $editedUser->password . "', email ='" . $editedUser->email . "'  
+        WHERE id=" . $editedUser->id;
+
+    $isSuccess = pg_query($db, $query);
+
+    if ($isSuccess) {
+        $_SESSION['success'] .= 'A személyes adatok sikeresen frissültek.';
+    } else {
+        $_SESSION['error'] .= 'Hiba történt, a személyes adatok nem kerültek frissítésre.';
+    }
+}
+
+function doEditDrivingLicense($editedDrivingLicense){
+    $db = getConnectedDb();
+
+    $query = "
+        UPDATE jogositvany
+        SET kategoria ='" . $editedDrivingLicense->category . "', azonositoszam ='" .  $editedDrivingLicense->cardnumber . "', 
+        automatavaltos_e =" . convertBoolToString($editedDrivingLicense->isAutomaticShifter) . ", kiallitas_idopontja='" . $editedDrivingLicense->date ."'   
+        WHERE id=" . $editedDrivingLicense->id;
+
+    $isSuccess = pg_query($db, $query);
+    if ($isSuccess){
+        $_SESSION['success'] .= 'A jogosítvány adatok sikeresen frissültek.';
+    }
+    else{
+        $_SESSION['error'] .= 'Hiba történt, a jogosítvány adatok nem kerültek frissítésre.';
+    }
+}
+
+function overwriteUserObject($originalUserObject){
+    $isAnythingEdited = false;
+    $editedUser = new User();
+    $editedUser->set_id($originalUserObject->id);
+    $editedUser->set_username($originalUserObject->username);
+
+    if (isExistPost("password") && $originalUserObject->password!=$_POST["password"])
+    {
+        $editedUser->set_password($_POST["password"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedUser->set_password($originalUserObject->password);
+    }
+
+    if (isExistPost("name") && $originalUserObject->name!=$_POST["name"])
+    {
+        $editedUser->set_name($_POST["name"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedUser->set_name($originalUserObject->name);
+    }
+
+    if (isExistPost("email") && $originalUserObject->email!=$_POST["email"])
+    {
+        $editedUser->set_email($_POST["email"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedUser->set_email($originalUserObject->email);
+    }
+
+    if ($isAnythingEdited){
+        return $editedUser;
+    }
+    $_SESSION['error'] .= "Nincsenek új személyes adatok megadva.";
+    return false;
+}
+
+function overwriteDrivingLicenseObject($originalDrivingLicenseObject){
+    $isAnythingEdited = false;
+    $editedDrivingLicense = new DrivingLicense();
+    $editedDrivingLicense->set_id($originalDrivingLicenseObject->id);
+
+    if (isExistPost("category") && $originalDrivingLicenseObject->category!=$_POST["category"])
+    {
+        $editedDrivingLicense->set_category($_POST["category"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedDrivingLicense->set_category($originalDrivingLicenseObject->category);
+    }
+
+    if (isExistPost("cardnumber") && $originalDrivingLicenseObject->cardnumber!=$_POST["cardnumber"])
+    {
+        $editedDrivingLicense->set_cardnumber($_POST["cardnumber"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedDrivingLicense->set_cardnumber($originalDrivingLicenseObject->cardnumber);
+    }
+
+    if (isExistPost("isAutomaticShifter") && convertBoolToString($originalDrivingLicenseObject->isAutomaticShifter)!=$_POST["isAutomaticShifter"])
+    {
+        $editedDrivingLicense->set_isAutomaticShifter($_POST["isAutomaticShifter"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedDrivingLicense->set_isAutomaticShifter($originalDrivingLicenseObject->isAutomaticShifter);
+    }
+
+    if (isExistPost("date") && $originalDrivingLicenseObject->date!=$_POST["date"])
+    {
+        $editedDrivingLicense->set_date($_POST["date"]);
+        $isAnythingEdited = true;
+    }else{
+        $editedDrivingLicense->set_date($originalDrivingLicenseObject->date);
+    }
+
+    if ($isAnythingEdited){
+        return $editedDrivingLicense;
+    }
+    $_SESSION['error'] .= "Nincsenek új jogosítvány adatok megadva.";
+    return false;
+}
+
+function checkValidityOfUserAndDrivingLicenseData($user){
+    if (isExistPost('password') && isExistPost('password2')){
+        if ($_POST['password'] != $_POST['password2']){
+            $_SESSION['error'] .= "A két jelszó nem egyezik. ";
+        }
+    }
+
+    if ($user->email != $_POST['email']){
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+            $_SESSION['error'] .= "Az e-mail cím nem érvényes. ";
+        }
+    
+        if (checkIfAlreadyExists('ugyfel', 'email', $_POST['email'])){
+            $_SESSION['error'] .= "Már beregisztráltak ezzel az e-mail címmel. ";    
+        }
+    }
+
+    return !isExistSession('error');
 }

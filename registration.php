@@ -91,22 +91,6 @@ function doRegistrate(){
     $_SESSION['error'] .= "Valami probléma történt, sikertelen regisztráció. ";
 }
 
-function displaySuccessMessage(){
-    if (isExistSession('success'))
-    {
-        echo "<p class=\"green\">" . $_SESSION['success'] . "</p>";
-        unset($_SESSION['success']);
-    }
-}
-
-function displayErrorMessage(){
-    if (isExistSession('error'))
-    {
-        echo "<p class=\"red\">" . $_SESSION['error'] . "</p>";
-        unset($_SESSION['error']);
-    }
-}
-
 function displayRegistrationForm(){
     echo '
     <div class="alert alert-secondary lead my-3" role="alert">

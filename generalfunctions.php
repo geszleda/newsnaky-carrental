@@ -37,4 +37,27 @@ function checkIfAlreadyExists($table, $columnname, $data){
     return true;
 }
 
+function displaySuccessMessage(){
+    if (isExistSession('success'))
+    {
+        echo "<p class=\"green\">" . $_SESSION['success'] . "</p>";
+        unset($_SESSION['success']);
+    }
+}
+
+function displayErrorMessage(){
+    if (isExistSession('error'))
+    {
+        echo "<p class=\"red\">" . $_SESSION['error'] . "</p>";
+        unset($_SESSION['error']);
+    }
+}
+
+function convertBoolToString($boolean){
+    if($boolean){
+        return 'true';
+    }
+    return 'false';
+}
+
 ?>
