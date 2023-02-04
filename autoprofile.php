@@ -57,7 +57,7 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
                 <form   action="rent.php"
                         method="POST">
                     <input type="hidden" name="auto_id" value="<?php echo getIdOfAvailableCar($brand, $type);?>">
-                    <input type="hidden" name="discount" value="<?php echo getDiscountDependingOnDate($brand, $type);?>">
+                    <input type="hidden" name="discount" value="<?php echo getDiscountDependingOnDate();?>">
                     <input type="hidden" name="startDate" value="<?php echo $_GET['startDate'];?>">
                     <input type="hidden" name="endDate" value="<?php echo $_GET['endDate'];?>">
                     <input type="hidden" name="brand" value="<?php echo $brand;?>">
@@ -92,7 +92,7 @@ function getDailyFee($brand, $type){
 function calculatePrice($brand, $type){
     if (isExistGet('startDate') && isExistGet('endDate')){
         $differencesInDays = getDifferencesInDate();
-        $discountByDate = getDiscountDependingOnDate($differencesInDays);
+        $discountByDate = getDiscountDependingOnDate();
         $dailyFee = getDailyFee($brand, $type);
 
         $price =  $dailyFee * (int)$differencesInDays * ((100 - $discountByDate)/100);
