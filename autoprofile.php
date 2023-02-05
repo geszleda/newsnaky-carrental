@@ -30,7 +30,8 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
     }else{
         echo    '<p class="lead my-3">
                     Jelenleg <b>' . $countOfAvailableCars . ' darab</b> elérhető ebből a típusból.
-                </p>'; ?>
+                </p>';
+    } ?>
 
     <div class="d-flex flex-wrap justify-content-center">
         <div class="p-8 item borderedWithoutHoverOpacity">
@@ -69,7 +70,6 @@ if (isExistGet('brand') && isExistGet('type') && isExistGet('img')){
         </div>
     </div>
 <?php
-    }
 }
 
 function getDailyFee($brand, $type){
