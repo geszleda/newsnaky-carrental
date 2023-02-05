@@ -124,10 +124,8 @@ function doEditExistingAuto($autoId){
 
     pg_query($db, $query);
 
-    var_dump(isset($_FILES['img']));
     if (isset($_FILES['img'])){
         $imagePath = uploadNewCarImage();
-        var_dump($imagePath);
 
         $query = "
         UPDATE auto
