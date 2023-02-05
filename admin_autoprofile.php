@@ -59,7 +59,7 @@ if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
                 <label for="isAutomaticShifter" class="lead my-3">manuális váltó</label><br><br>
 
                 <label for="dailyFee" class="lead my-3">Napidíj:</label>
-                <input type="number" name="dailyFee" min="10000" max="99999999" step="1000" value="<?= $auto->dailyFee?>"><br><br>
+                <input type="number" name="dailyFee" min="0" max="99999999" step="1000" value="<?= $auto->dailyFee?>"><br><br>
 
                 <label for="img" class="lead my-3">Képhivatkozás:</label>
                 <input type="file" name="img">
