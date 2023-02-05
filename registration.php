@@ -9,6 +9,7 @@ $_SESSION['success'] = '';
 
 <div class="container">
 <div class="row justify-content-center">
+    <h1 class="display-4 fst-italic">Regisztráció</h1><br>
     <div class="col-10"></div>
         <div class="col-6 borderedWithoutHoverOpacity">
             <?php

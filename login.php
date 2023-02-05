@@ -8,6 +8,7 @@ handleLoginAttempt();
 
 <div class="container">
     <div class="row justify-content-center">
+    <h1 class="display-4 fst-italic">Bejelentkezés</h1><br>
         <div class="col-2"></div>
             <div class="col-3">
                 <?php 

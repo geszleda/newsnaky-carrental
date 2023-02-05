@@ -10,10 +10,11 @@ if (!isExistSession("user") || $_SESSION["user"]!="admin"){
 
 <div class="container">
     <div class="row justify-content-center">
+        <h1 class="display-4 fst-italic">Kimutatások</h1><br>
         <div class="col-2"></div>
-            <div class="col-6">
-            <p class="lead my-3">Legnagyobb árbevételt generáló jármű: <?php echo getIncomeGenerator(); ?></p> 
-            <p class="lead my-3">Járműtípusok, melyeket az elmúlt 6 hónapban senki sem kölcsönzött: <?php echo getUnpopularCarsInLastMonth(); ?></p> 
+            <div class="col-7">
+            <p class="lead my-3"><b>Legnagyobb árbevételt generáló jármű: </b><?php echo getIncomeGenerator(); ?></p> 
+            <p class="lead my-3"><b>Járműtípusok, melyeket az elmúlt 6 hónapban senki sem kölcsönzött:</b><br> <?php echo getUnpopularCarsInLastMonth(); ?></p> 
             </div>
         <div class="col-2"></div>
     </div>
