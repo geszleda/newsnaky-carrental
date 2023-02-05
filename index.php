@@ -47,46 +47,25 @@
         <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
             <div class="col-md-12 px-0">
                 <h1 class="display-4 fst-italic">Üdvözli Önt a NewSnaky Cars Kft.!</h1>
-                <div class="lead my-3">
-                <h2>Adatbázis rendszerek programozása beadandó: AUTÓKÖLCSÖNZŐ (46.)</h2>
-                <p>Három darab jogosultsági kör létezik az weboldalon: <i>vendég, felhasználó és admin.</i></p>
-                <p>Hozzáférhető funckiók a jogosultságok alapján:</p>
-                <pre><code>**JOGOSULTSÁG** // **KÓD** // **NAVIGÁCIÓ A UI-on**</code></pre>
-                <h3>Vendég:</h3>
-                    <ul>
-                    <li>Kínálat autó típus szerint // (offers.php) // KÍNÁLAT</li>
-                    <li>Árkalkuláció* // (autoprofile.php -&gt; calculatePrice) // KÍNÁLAT -&gt; Tovább az autó profiljára -&gt; Árkalkuláció</li>
-                    </ul>
-                <h3>Felhasználó:</h3>
-                <p><i>felhasználónév: molnaristvan, jelszo: jelszo15</i></p>
-                <ul>
-                <li>Kínálat autó típus szerint // (offers.php) // KÍNÁLAT</li>
-                <li>Árkalkuláció* // (autoprofile.php -&gt; calculatePrice) // KÍNÁLAT -&gt; Tovább az autó profiljára -&gt; Árkalkuláció</li>
-                <li>Foglalás* // (rent.php -&gt; insertNewRent) // KÍNÁLAT -&gt; Tovább az autó profiljára -&gt; FOGLALÁS</li>
-                </ul>
-                <h3>Admin:</h3>
-                <p><i>felhasználónév: admin, jelszó: admin</p></i>
-                    <ul>
-                    <li> Kínálat autó típus szerint // (offers.php) // KÍNÁLAT </li>
-                    <li> Kínálat példány (id) szerint // (adminview.php) // ADMIN-KEZELŐFELÜLET </li>
-                    <li> Árkalkuláció* // (autoprofile.php -&gt; calculatePrice) // KÍNÁLAT -&gt; Tovább az autó profiljára -&gt; Árkalkuláció </li>
-                    <li> Új autó hozzáadása // admin_autoprofile.php -&gt; doAddAuto // ADMIN-KEZELŐFELÜLET -&gt; Új autó hozzáadása + </li>
-                    <li> Meglévő autó szerkesztése // (admin_autoprofile.php -&gt; doEditExistingAuto) // ADMIN-KEZELŐFELÜLET -&gt; Szerkesztés </li>
-                    <li> Autó törlése // (admin_autoprofile.php -&gt; doDeleteAuto) // ADMIN-KEZELŐFELÜLET -&gt; Törlés </li>
-                    <li> Statisztikai kimutatások // (statistics.php) // KIMUTATÁSOK </li>
-                    <br>
-                <p>*Foglalás: <br>
-                - NEM jogosult manuális váltós autó foglalására az a felhasználó, akinek automataváltós autó vezetésére van kiállítva a jogosítványa (rent.php -&gt; isUserEntitledToRentThisCar) <br>
-                például: felhasználónév: horvathjanos, jelszó: jelszo4 NEM jogosult a autó: Hyundai Sedan autó kölcsönzésére</p>
-                <p>*Árkalkuláció: <br>
-                - aki 5 napon túl foglal autót, az 5% kedvezményre jogosult <br>
-                - aki 7 napon túl foglal autót, a 10% kedvezményre jogosult (autoprofile.php -&gt; getDiscountDependingOnDate)</p>
-
-                <h3> E-K model: </h3>
-                <img class="maximizedWidth3" src="database_models/ERmodel.jpg" />
                 <br>
-                <h3> Relációs model: </h3>
-                <img class="maximizedWidth3" src="database_models/relationalmodel.jpg" />
+                <div class="lead my-3">
+                    Mi vagyunk az a cég, amelynek a legfontosabb célja, hogy az Ön számára a lehető legkényelmesebb és leghatékonyabb autókölcsönzési szolgáltatást nyújtsuk. Az autókölcsönző szolgáltatásunkkal garantáljuk, hogy a legmodernebb autókkal, valamint a legjobb árakkal szolgáljunk. Minden ügyfelünknek a legjobb minőségű szolgáltatást kívánjuk biztosítani. Tartsanak velünk, és élvezze az autóbérlés új dimenzióját! <br><br><br>
+                    <hr>
+                    <figure class="note note-secondary p-4 bg-dark">
+                        <blockquote class="blockquote">
+                            <p class="pb-2">
+                            "A legmegbízhatóbb autókölcsönző a NewSnaky Cars Kft. <br>
+                            Rendszeresen visszatérő ügyfelük vagyuk, és soha sem csalódtam még bennük. "
+                            </p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer mb-0">
+                        Kiss Gábor
+                        </figcaption>
+                    </figure>
+                    <hr>
+                    <br><br>
+                    
+                    Az NewSnaky Cars Kft autókölcsönző áll a legmodernebb autók állandó rendelkezésre állásáért. Az általunk kínált autók kiváló minőségűek és rendelkeznek az összes szükséges felszereltséggel. Az autók bérlése könnyen és egyszerűen intézhető a honlapunkon keresztül, és az ügyfélszolgálatunk mindig készséggel áll segíteni. Az árak kedvezőek és rugalmasan alkalmazkodnak az igényekhez. Látogasson el hozzánk, és fedezze fel a NewSnaky Cars Kft minőségi autókölcsönző szolgáltatásait!
                 </div>
             </div>
         </div>
