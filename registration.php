@@ -129,8 +129,7 @@ function alertUserAboutDrivingLicenseResponsibility(){
         Felhívjuk figyelmét, hogy biztonsági okok miatt köteles megadni jogosítványa adatait!<br>
         A kölcsönzés ideje alatt történt baleset vagy károkozás esetén a jogosítvány tulajdonosa kereshető fel, attól függetlenül, hogy
         valójában ki vezette a járművet. Így azt ajánljuk, hogy a kölcsönzött autót csak Ön vezesse, ne adja át másnak!<br>
-        NEM kölcsönözhet olyan járművet, melyet a jogosítványa értelmében nem vezethet, azonban lehetősége lesz más, jogosult személy
-        adatait megadni, azaz mások javára is kölcsönözhet a másik személy adatainak megadásával.
+        NEM kölcsönözhet olyan járművet, melyet a jogosítványa értelmében nem vezethet.
     </div>';
 }
 

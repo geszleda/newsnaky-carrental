@@ -3,6 +3,7 @@
 
 session_start();
 
+$_SESSION['unsuccesfulRentFeedback'] = '';
 if (isExistSession('user') && isExistPost('auto_id')){
     $userId = getUserId($_SESSION['user']);
     $autoId = $_POST['auto_id'];
@@ -11,9 +12,6 @@ if (isExistSession('user') && isExistPost('auto_id')){
     $endDate = $_POST['endDate'];
 
     if (!isUserEntitledToRentThisCar($userId, $autoId)){
-        $_SESSION['unsuccesfulRentFeedback'] = "Önnek csak automataváltós jogosítványa van, ezért nem jogosult vezetni
-        ezt az autót.";
-
         directToPage('autoprofile.php?brand=' . $_POST["brand"] . '&type=' . $_POST["type"] . '&img=' . $_POST["img"]);
     }else{
         $success = insertNewRent($userId, $autoId, $discount, $startDate, $endDate);
@@ -59,6 +57,7 @@ function insertNewRent($userId, $autoId, $discount, $startDate, $endDate){
 }
 
 function isUserEntitledToRentThisCar($userId, $autoId){
+    $isEntitled = true;
     $db = getConnectedDb();
     $query1="
         SELECT automatavaltos_e from jogositvany where ugyfel_id=" .$userId.";";
@@ -75,9 +74,25 @@ function isUserEntitledToRentThisCar($userId, $autoId){
     $isAutomaticShifterCar = pg_fetch_result($result2, 0, 0) == "t";
 
     if ($isDriverHasOnlyAutomaticShifterDrivingLicense && !$isAutomaticShifterCar){
-        return false;
+        $_SESSION['unsuccesfulRentFeedback'] .= "Önnek csak automataváltós jogosítványa van, ezért nem jogosult vezetni
+        ezt az autót. ";
+
+        $isEntitled = false;
     }
 
-    return true;
+    $query3 = "
+        SELECT kategoria from jogositvany where ugyfel_id=" .$userId.";";
+
+    $result3 = pg_query($db, $query3);
+    $drivingLicenseCategory = pg_fetch_result($result3, 0, 0);
+
+    if ($drivingLicenseCategory == "A" || $drivingLicenseCategory == "M" || $drivingLicenseCategory == "B1"){
+        $_SESSION['unsuccesfulRentFeedback'] .= "Ön nem jogusult " . $drivingLicenseCategory . " kategóriájú jogosítvánnyal vezetni ezt az 
+        autót. ";
+
+        $isEntitled = false;
+    }
+
+    return $isEntitled;
 }
 ?>
