@@ -3,6 +3,7 @@
         include_once 'model/auto.php';
         include_once 'generalfunctions.php';
         include_once 'generalmainpage.php';
+        include_once 'imagesaver.php';
 
 if (!isExistGet('id') || !isExistGet('requestType') || !isExistSession("user") || $_SESSION["user"]!="admin"){
     directToPage('adminview.php');
@@ -29,7 +30,9 @@ if (isExistPost('deleted')){
 if (isExistPost('added')){
     doAddAuto();
 
-    directToPage('adminview.php');
+    var_dump($_FILES['img']['error']);
+
+    //directToPage('adminview.php');
 }
 
 if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
@@ -76,7 +79,7 @@ if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
 else if($_GET['requestType'] == "addNew"){?>
         <div class="col-5 px-0">
         <div class="col-10 p-8 item borderedWithoutHoverOpacity maximizedWidth2 justify-content-center">
-            <form action="<?= 'admin_autoprofile.php?id=0&requestType=addNew' ?>" method="post">
+            <form action="<?= 'admin_autoprofile.php?id=0&requestType=addNew' ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="added" value="added">
 
                 <label for="brand" class="lead my-3">Márka:</label>
@@ -155,12 +158,21 @@ function doAddAuto(){
     $type = $_POST['type'];
     $isAutomaticShifter = $_POST['isAutomaticShifter'];
     $dailyFee = $_POST['dailyFee'];
-    $img = $_POST['img'];
+
+    $imagePath = '';
+    if (isset($_FILES['img'])){
+        $sequenceQuery = "SELECT last_value FROM auto_sequence;";
+        $result = pg_query($db, $sequenceQuery);
+        $imageId = pg_fetch_result($result, 0, 0) + 1;
+
+        $imagePath = generateImagePath($imageId, $_FILES['img']);
+        saveImage($imagePath, $_FILES['img']);
+    }
 
     $query = "
     INSERT INTO auto (id, marka, tipus, automatavaltos_e, napidij, kepHivatkozas)
     VALUES
-      (nextval('auto_sequence'), '" . $brand . "', '" . $type . "', " . $isAutomaticShifter . ", " . $dailyFee . ", '" . $img . "');";
+      (nextval('auto_sequence'), '" . $brand . "', '" . $type . "', " . $isAutomaticShifter . ", " . $dailyFee . ", '" . $imagePath . "');";
 
     pg_query($db, $query);
 }
