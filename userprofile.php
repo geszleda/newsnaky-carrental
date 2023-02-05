@@ -42,9 +42,9 @@ $drivingLicense = $user->drivingLicense;?>
 function displayUserData($user){
     echo '
         <ul class="lead my-3">
-            <li>' . $user->username . '</li>
-            <li>' . $user->name     . '</li>
-            <li>' . $user->email    . '</li>
+            <li><b>Felhasználónév:</b> ' . $user->username . '</li>
+            <li><b>Teljes név:</b> ' . $user->name     . '</li>
+            <li><b>E-mail cím:</b> ' . $user->email    . '</li>
         </ul>    
     ';
 }
@@ -52,10 +52,10 @@ function displayUserData($user){
 function displayDrivingLicenseData($drivingLicense){
     echo '
         <ul class="lead my-3">
-            <li>' . $drivingLicense->cardnumber. '</li>
-            <li>' . $drivingLicense->category     . '</li>
-            <li>' . $drivingLicense->isAutomaticShifter   . '</li>
-            <li>' . $drivingLicense->date   . '</li>
+            <li><b>Okmányazonosító:</b> ' . $drivingLicense->cardnumber. '</li>
+            <li><b>Kategória:</b> ' . $drivingLicense->category     . '</li>
+            <li><b>Automataváltós:</b> ' . convertBoolToYesNo($drivingLicense->isAutomaticShifter)   . '</li>
+            <li><b>Kiállítás dátuma:</b> ' . $drivingLicense->date   . '</li>
         </ul>    
     ';
 }

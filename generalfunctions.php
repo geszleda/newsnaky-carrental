@@ -60,4 +60,11 @@ function convertBoolToString($boolean){
     return 'false';
 }
 
+function convertBoolToYesNo($boolean){
+    if($boolean){
+        return 'igen';
+    }
+    return 'nem';
+}
+
 ?>
