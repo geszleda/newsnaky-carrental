@@ -30,9 +30,7 @@ if (isExistPost('deleted')){
 if (isExistPost('added')){
     doAddAuto();
 
-    var_dump($_FILES['img']['error']);
-
-    //directToPage('adminview.php');
+    directToPage('adminview.php');
 }
 
 if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
@@ -40,7 +38,7 @@ if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
         <div class="col-10 p-8 item borderedWithoutHoverOpacity maximizedWidth2 justify-content-center">
             <?php
             if ($_GET['requestType'] == "edit"){
-            echo '<form action="admin_autoprofile.php?id=' .$auto->id. '&requestType=edit" method="post">
+            echo '<form action="admin_autoprofile.php?id=' .$auto->id. '&requestType=edit" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="edited" value="edited">';}
             else if ($_GET['requestType'] == "delete"){
             echo '<form action="admin_autoprofile.php?id=' .$auto->id. '&requestType=delete" method="post">
@@ -64,7 +62,7 @@ if ($_GET['requestType'] == "edit" || $_GET['requestType'] == "delete"){?>
                 <input type="number" name="dailyFee" min="10000" max="99999999" step="1000" value="<?= $auto->dailyFee?>"><br><br>
 
                 <label for="img" class="lead my-3">Képhivatkozás:</label>
-                <input type="file" name="img" value="<?= $auto->imagePath?>">
+                <input type="file" name="img">
 
         <?php  if ($_GET['requestType'] == "edit"){
             echo '<p><input type="submit" value="FELÜLÍR" class="fs-4 btn btn-outline-primary"></p>';
@@ -126,10 +124,14 @@ function doEditExistingAuto($autoId){
 
     pg_query($db, $query);
 
-    if (isExistPost('img')){
+    var_dump(isset($_FILES['img']));
+    if (isset($_FILES['img'])){
+        $imagePath = uploadNewCarImage();
+        var_dump($imagePath);
+
         $query = "
         UPDATE auto
-        SET kephivatkozas = '" . $_POST['img'] . "'  
+        SET kephivatkozas = '" . $imagePath . "'  
         WHERE id=" . $autoId;
 
         pg_query($db, $query);
@@ -161,12 +163,7 @@ function doAddAuto(){
 
     $imagePath = '';
     if (isset($_FILES['img'])){
-        $sequenceQuery = "SELECT last_value FROM auto_sequence;";
-        $result = pg_query($db, $sequenceQuery);
-        $imageId = pg_fetch_result($result, 0, 0) + 1;
-
-        $imagePath = generateImagePath($imageId, $_FILES['img']);
-        saveImage($imagePath, $_FILES['img']);
+        $imagePath = uploadNewCarImage();
     }
 
     $query = "
@@ -175,5 +172,16 @@ function doAddAuto(){
       (nextval('auto_sequence'), '" . $brand . "', '" . $type . "', " . $isAutomaticShifter . ", " . $dailyFee . ", '" . $imagePath . "');";
 
     pg_query($db, $query);
+}
+
+function uploadNewCarImage(){
+    $db = getConnectedDb();
+
+    $imageId = uniqid();
+
+    $imagePath = generateImagePath($imageId, $_FILES['img']);
+    saveImage($imagePath, $_FILES['img']);
+
+    return $imagePath;
 }
 ?>
