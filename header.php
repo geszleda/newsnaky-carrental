@@ -29,11 +29,13 @@
                 if($_SESSION["user"]=="admin"){
                     echo '
                         <li><a href="adminview.php" class="nav-link px-2 text-white">Admin-kezelőfelület</a></li>
+                        <li><a href="admin_allrents.php" class="nav-link px-2 text-white">Összes kölcsönzés</a></li>
                         <li><a href="statistics.php" class="nav-link px-2 text-white">Kimutatások</a></li>';
                 }else{
                     echo '
                         <li>' . getUserPicture() . '
-                        <a href="userprofile.php" class="nav-link px-2 text-white">Profil</a></li>';
+                        <a href="userprofile.php" class="nav-link px-2 text-white">Profil</a></li>
+                        <a href="user_rents.php" class="nav-link px-2 text-white">Foglalásaim</a></li>';
                 }
             } ?>
                     </ul>

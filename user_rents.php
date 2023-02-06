@@ -2,26 +2,27 @@
         include_once 'generalmainpage.php';
         include_once 'generalfunctions.php';
         include_once 'data/dbConnection.php';
+        include_once 'model/user.php';
         include_once 'pricecalculator.php';
 
-if (!isExistSession("user") || $_SESSION["user"]!="admin"){
+if (!isExistSession("user") || $_SESSION["user"]=="admin"){
     directToPage('index.php');
 } ?>
 
-<h1 class="display-4 fst-italic">Kölcsönzések</h1><br>
+<h1 class="display-4 fst-italic">Foglalásaim</h1><br>
 
 <?php
-if(isExistGet('id')){
-    $resultOfRents = getAllAutoRents($_GET['id']);
-    drawtable($resultOfRents);
-}
+    $user = getUserObject($_SESSION["user"]);
+    $rentResults = getAllAutoRents($user->id);
+    drawtable($rentResults);
 
-function getAllAutoRents($autoId){
+
+function getAllAutoRents($userId){
     $query='
-        SELECT kolcsonzes.id, kolcsonzes.kezdete, kolcsonzes.vege, kolcsonzes.kedvezmeny, ugyfel.nev, ugyfel.felhasznalonev, ugyfel.email
+        SELECT kolcsonzes.kezdete, kolcsonzes.vege, auto.marka, auto.tipus, kolcsonzes.kedvezmeny, auto.napidij
         FROM kolcsonzes
-        JOIN ugyfel ON kolcsonzes.ugyfel_id=ugyfel.id
-        WHERE auto_id=' . $autoId .'
+        JOIN auto ON kolcsonzes.auto_id=auto.id
+        WHERE kolcsonzes.ugyfel_id=' . $userId .'
         ORDER BY kolcsonzes.kezdete;';
 
     $db = getConnectedDb();
@@ -37,13 +38,12 @@ function drawtable($resultOfRents){
         <table class="table table-dark">
             <thead>
                 <tr>
-                    <th scope="col">Kölcsönzés azonosító</th>
                     <th scope="col">Kezdete</th>
                     <th scope="col">Vége</th>
+                    <th scope="col">Márka</th>
+                    <th scope="col">Típus</th>
                     <th scope="col">Kedvezmény (%)</th>
-                    <th scope="col">Ügyfél név</th>
-                    <th scope="col">Ügyfél felhasználónév</th>
-                    <th scope="col">Ügyfél elérhetőség</th>
+                    <th scope="col">Napidíj</th>
                     <th scope="col">Végösszeg</th>
                 </tr>
             </thead>
@@ -54,6 +54,7 @@ function drawtable($resultOfRents){
             $startDate = '';
             $endDate = '';
             $discount = 0;
+            $dailyFee = 0;
             for ($j = 0; $j <= $columnCount; $j++) {
                 if ($j<$columnCount){
                     $rowColumnResult = pg_fetch_result($resultOfRents, $i, $j);
@@ -69,9 +70,12 @@ function drawtable($resultOfRents){
                         case "kedvezmeny":
                             $discount = $rowColumnResult;
                             break;
+                        case "napidij":
+                            $dailyFee = $rowColumnResult;
+                            break;
                     }
                 }else{
-                    echo '<td>' . calculatePrice($startDate, $endDate, $discount, $_GET['id']) . ' Ft </td>';
+                    echo '<td>' . calculatePrice2($startDate, $endDate, $discount, $dailyFee) . ' Ft </td>';
                 }
 
             }
